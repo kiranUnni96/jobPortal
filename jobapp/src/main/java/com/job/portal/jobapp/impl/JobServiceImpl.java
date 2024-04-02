@@ -1,52 +1,56 @@
 package com.job.portal.jobapp.impl;
 
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Iterator;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.job.portal.jobapp.Job;
+import com.job.portal.jobapp.JobRepository;
 import com.job.portal.jobapp.JobService;
 
 @Service
 public class JobServiceImpl implements JobService {
 
-	List<Job> jobs=new ArrayList<>();
+	// List<Job> jobs=new ArrayList<>();
+	@Autowired
+	JobRepository repo;
+
 	@Override
 	public void createJob(Job job) {
-		this.jobs.add(job);		
+		this.repo.save(job);
 	}
 
 	@Override
-	public List<Job> findAll() {	 
-		return this.jobs;
+	public List<Job> findAll() {
+		return this.repo.findAll();
 	}
 
 	@Override
 	public Job findById(int id) {
-		for(Job job: jobs) {
-			if(job.getId().equals(id))
-				return job;
-		}
-		return null;
+		return this.repo.findById(id).orElseThrow(() -> new NoSuchElementException("User not found"));
+
 	}
+
 	public boolean deleteById(int id) {
-		Iterator<Job> iterator=jobs.iterator();
-		while(iterator.hasNext()) {
-			Job job=iterator.next();
-			if(job.getId().equals(id)) {
-				iterator.remove();
-				return true;
-			}
+		try {
+			repo.deleteById(id);
+			return true;
+		} catch (Exception e) {
+			return false;
 		}
-		return false;
 	}
 
 	@Override
 	public boolean putJob(int id, Job updatedJob) {
-		for(Job job:jobs) {
-			if(job.getId().equals(updatedJob.getId())) {
+		Optional<Job> jobOptional = repo.findById(id);
+		if (jobOptional.isPresent()) {
+			Job job = jobOptional.get();
+			if (job.getId().equals(updatedJob.getId())) {
 				job.setDescription(updatedJob.getDescription());
 				job.setId(updatedJob.getId());
 				job.setLocation(updatedJob.getLocation());
@@ -56,6 +60,7 @@ public class JobServiceImpl implements JobService {
 			}
 			return true;
 		}
+
 		return false;
 	}
 
