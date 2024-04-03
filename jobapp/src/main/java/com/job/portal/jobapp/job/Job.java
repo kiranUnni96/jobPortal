@@ -1,7 +1,17 @@
-package com.job.portal.jobapp;
+package com.job.portal.jobapp.job;
 
+
+
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+
+@Entity
 public class Job {
 
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer id;
 	private String title;
 	private String description;
@@ -9,6 +19,11 @@ public class Job {
 	private String maxSalary;
 	private String location;
 	
+	
+	public Job() {
+		super();
+	}
+
 	public Job(Integer id, String title, String description, String minSalary, String maxSalary, String location) {
 		super();
 		this.id = id;

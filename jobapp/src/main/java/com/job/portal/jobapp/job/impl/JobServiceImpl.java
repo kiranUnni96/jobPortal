@@ -1,4 +1,4 @@
-package com.job.portal.jobapp.impl;
+package com.job.portal.jobapp.job.impl;
 
 import java.util.ArrayList;
 import java.util.NoSuchElementException;
@@ -9,9 +9,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.job.portal.jobapp.Job;
-import com.job.portal.jobapp.JobRepository;
-import com.job.portal.jobapp.JobService;
+import com.job.portal.jobapp.job.Job;
+import com.job.portal.jobapp.job.JobRepository;
+import com.job.portal.jobapp.job.JobService;
 
 @Service
 public class JobServiceImpl implements JobService {
@@ -50,14 +50,15 @@ public class JobServiceImpl implements JobService {
 		Optional<Job> jobOptional = repo.findById(id);
 		if (jobOptional.isPresent()) {
 			Job job = jobOptional.get();
-			if (job.getId().equals(updatedJob.getId())) {
-				job.setDescription(updatedJob.getDescription());
-				job.setId(updatedJob.getId());
-				job.setLocation(updatedJob.getLocation());
-				job.setMaxSalary(updatedJob.getMaxSalary());
-				job.setMinSalary(updatedJob.getMinSalary());
-				job.setTitle(updatedJob.getTitle());
-			}
+
+			job.setDescription(updatedJob.getDescription());
+			job.setId(updatedJob.getId());
+			job.setLocation(updatedJob.getLocation());
+			job.setMaxSalary(updatedJob.getMaxSalary());
+			job.setMinSalary(updatedJob.getMinSalary());
+			job.setTitle(updatedJob.getTitle());
+			repo.save(job);
+
 			return true;
 		}
 
