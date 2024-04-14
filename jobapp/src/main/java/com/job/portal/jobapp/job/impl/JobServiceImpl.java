@@ -9,6 +9,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.job.portal.jobapp.company.Company;
+import com.job.portal.jobapp.company.CompanyService;
 import com.job.portal.jobapp.job.Job;
 import com.job.portal.jobapp.job.JobRepository;
 import com.job.portal.jobapp.job.JobService;
@@ -20,9 +22,18 @@ public class JobServiceImpl implements JobService {
 	@Autowired
 	JobRepository repo;
 
+	@Autowired
+	CompanyService companyService;
+
 	@Override
-	public void createJob(Job job) {
-		this.repo.save(job);
+	public boolean createJob(Job job) {
+		Company company = companyService.findById(job.getCompany().getCompanyId());
+		if (company != null) {
+			job.setCompany(company);
+			this.repo.save(job);
+			return true;
+		} else
+			return false;
 	}
 
 	@Override

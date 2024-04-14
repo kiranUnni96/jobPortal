@@ -8,37 +8,44 @@ import jakarta.persistence.OneToMany;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.job.portal.jobapp.job.Job;
+import com.job.portal.jobapp.reviews.Review;
 
 @Entity
 public class Company {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer companyId;
+	private Integer id;
 	private String companyName;
 	private String companyDesc;
 	
-	@OneToMany
+	@JsonIgnore
+	@OneToMany(mappedBy="company")
 	private List<Job> jobs;
+	@JsonIgnore
+	@OneToMany(mappedBy="company")
+	private List<Review> reviews;
 
 	public Company() {
 		super();
 	}
 
-	public Company(Integer companyId, String companyName, String companyDesc) {
+	public Company(Integer companyId, String companyName, String companyDesc,List<Review> review) {
 		super();
-		this.companyId = companyId;
+		this.id = companyId;
 		this.companyName = companyName;
 		this.companyDesc = companyDesc;
+		this.reviews=reviews;
 	}
 
 	public Integer getCompanyId() {
-		return companyId;
+		return id;
 	}
 
 	public void setCompanyId(Integer companyId) {
-		this.companyId = companyId;
+		this.id = companyId;
 	}
 
 	public String getCompanyName() {
@@ -55,6 +62,22 @@ public class Company {
 
 	public void setCompanyDesc(String companyDesc) {
 		this.companyDesc = companyDesc;
+	}
+
+	public List<Job> getJobs() {
+		return jobs;
+	}
+
+	public void setJobs(List<Job> jobs) {
+		this.jobs = jobs;
+	}
+
+	public List<Review> getReviews() {
+		return reviews;
+	}
+
+	public void setReviews(List<Review> reviews) {
+		this.reviews = reviews;
 	}
 
 }

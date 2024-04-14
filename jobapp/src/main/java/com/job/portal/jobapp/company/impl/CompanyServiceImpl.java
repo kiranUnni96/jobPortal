@@ -29,7 +29,7 @@ public class CompanyServiceImpl implements CompanyService {
 
 	@Override
 	public Company findById(int id) {
-		return repo.findById(id).orElseThrow(() -> new NoSuchElementException("Company with not found with id " + id));
+		return repo.findById(id).orElse(null);
 	}
 
 	@Override
@@ -50,6 +50,7 @@ public class CompanyServiceImpl implements CompanyService {
 			Company company = companyOptional.get();
 			company.setCompanyDesc(updatedCompany.getCompanyDesc());
 			company.setCompanyName(updatedCompany.getCompanyName());
+			company.setJobs(updatedCompany.getJobs());
 			repo.save(company);
 			return true;
 		}

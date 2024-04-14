@@ -15,12 +15,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.job.portal.jobapp.job.Job;
+import com.job.portal.jobapp.job.JobService;
+
 @RestController
 @RequestMapping("/companies")
 public class CompanyController {
 
 	@Autowired
 	CompanyService service;
+	@Autowired
+	JobService jobService;
 
 	@GetMapping
 	public ResponseEntity<List<Company>> findAll() {
@@ -52,7 +57,11 @@ public class CompanyController {
 	}
 
 	@DeleteMapping("/{id}")
-	public ResponseEntity deleteCompany(@PathVariable int id) {
+	public ResponseEntity deleteCompany(@PathVariable int id) {				
+		List<Job> jobs=service.findById(id).getJobs();
+		for(Job job: jobs) {
+			jobService.deleteById(job.getId());
+		}
 		Boolean flag = service.deleteById(id);
 		if (flag)
 			return new ResponseEntity(HttpStatus.OK);

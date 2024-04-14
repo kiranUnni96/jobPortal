@@ -38,8 +38,11 @@ public class JobController {
 
 	@PostMapping
 	public ResponseEntity createJob(@RequestBody Job job) {
-		jobService.createJob(job);
-		return new ResponseEntity(HttpStatus.OK);
+		boolean flag = jobService.createJob(job);
+		if (flag)
+			return new ResponseEntity("Job Created Successfully", HttpStatus.OK);
+		else
+			return new ResponseEntity("Job Created Successfully", HttpStatus.NOT_FOUND);
 	}
 
 	@GetMapping("/{id}")

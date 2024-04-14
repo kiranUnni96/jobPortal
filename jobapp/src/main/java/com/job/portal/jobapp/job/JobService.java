@@ -4,7 +4,7 @@ import java.util.List;
 
 public interface JobService {
 	
-	public void createJob(Job job);
+	public boolean createJob(Job job);
 	public List<Job> findAll();
 	public Job findById(int id);
 	//public void updateJob()
